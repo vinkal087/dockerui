@@ -1,0 +1,35 @@
+%link{:href => "//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css", :rel => "stylesheet"}
+  .nav-side-menu
+    .brand SideBar
+    %i.fa.fa-bars.fa-2x.toggle-btn{"data-target" => "#menu-content", "data-toggle" => "collapse"}
+    .menu-list
+      %ul#menu-content.menu-content.collapse.out
+        %li
+          %a{:href => "/dashboard/index"}
+            %i.fa.fa-dashboard.fa-lg
+            Dashboard
+        %li.collapsed.active{"data-target" => "#products", "data-toggle" => "collapse"}
+          %a{:href => "/dashboard/images"}
+            %span.glyphicon.glyphicon-tasks{"aria-hidden" => "true"}
+            Images
+        %li.collapsed.active{"data-target" => "#products", "data-toggle" => "collapse"}
+          %a{:href => "/dashboard/cvm"}
+            %span.glyphicon.glyphicon-screenshot{"aria-hidden" => "true"}
+            CVMs
+        
+        %li.collapsed.active{"data-target" => "#products", "data-toggle" => "collapse"}
+          %a{:href => "/dashboard/hosts"}
+            %span.glyphicon.glyphicon-th-list{"aria-hidden" => "true"}
+            Hosts
+            
+         
+        
+       
+        %li
+          %a{:href => "/dashboard/users"}
+            %i.fa.fa-user.fa-lg
+            Users
+        %li
+          %a{:href => "#"}
+            %i.fa.fa-users.fa-lg
+            Settings

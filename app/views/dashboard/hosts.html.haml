@@ -1,0 +1,35 @@
+= render 'shared/sidebar'
+= render 'shared/navbar'
+#wrapper
+  .panel.panel-default
+  / Default panel contents
+  .panel-heading Hosts
+  
+  .btn-group{"aria-label" => "...", :role => "group"}
+    %button.btn.btn-default{:type => "button"} Statistics
+   
+    .btn-group{:role => "group"}
+      %button.btn.btn-default.dropdown-toggle{"aria-expanded" => "false", "data-toggle" => "dropdown", :type => "button"}Actions
+
+      %ul.dropdown-menu{:role => "menu"}
+        %li
+          %a{:href => "#"} Dropdown link
+        %li
+          %a{:href => "#"} Dropdown link 
+  / Table
+  %table.table.table-bordered
+    %thead
+      %tr
+        %th #
+        %th Name
+        %th Storage
+        %th Ram
+        %th OS
+    %tbody
+      - @hosts.each_with_index do |host,index|
+        %tr
+          %td= index+1
+          %td= host['hostname'] 
+          %td= host['storage']
+          %td= host['ram']
+          %td= host['host_os']

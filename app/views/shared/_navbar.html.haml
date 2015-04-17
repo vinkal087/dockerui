@@ -1,0 +1,85 @@
+%nav.navbar.navbar-default
+  .container-fluid
+    / Brand and toggle get grouped for better mobile display
+    .navbar-header
+      %button.navbar-toggle.collapsed{"data-target" => "#bs-example-navbar-collapse-1", "data-toggle" => "collapse", :type => "button"}
+        %span.sr-only Toggle navigation
+        %span.icon-bar
+        %span.icon-bar
+        %span.icon-bar
+      %a.navbar-brand{:href => "#"} CVM CLOUD
+    / Collect the nav links, forms, and other content for toggling
+    #bs-example-navbar-collapse-1.collapse.navbar-collapse
+      
+        
+        
+          
+   
+      %ul.nav.navbar-nav.navbar-right
+        %li
+          %button.btn.btn-primary.btn-lg{"data-target" => "#my1Modal", "data-toggle" => "modal", :type => "button"}Launch CVM
+          #my1Modal.modal.fade
+            %form#createcvm.form-horizontal{:action => "/dashboard/createcvm", :name => "createcvm", :method => "post"}
+              .modal-dialog
+                .modal-content
+                  .modal-header
+                    %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} &times;
+                    %h4.modal-title Fill In The details
+                  .modal-body
+                    %ul.nav.nav-pills
+                      %li.active
+                        %a{:href => "#impdetails"} *Important Details
+                        #impdetails
+                          %form#createcvm.form
+                            .form-group.required
+                              %label.control-label.col-xs-2{:for => "inputName"}Name
+                              .col-xs-10
+                              %input#inputName.form-control{:placeholder => "CVM Name..", :type => "text",:name => "cvmname"}
+                            .form-group.required
+                              %label.control-label.col-xs-2{:for => "imagename"}Image
+                              .col-xs-10
+                              %select#imagename.form-control{"data-original-title" => "", :name => "image", :title => "", :onchange => "getDerivedImages(this.value)", :onselect => "getDerivedImages(this.value)"}
+                                %option{:value => "select"} --Select-- 
+                                - base_images = get_base_images
+                                - base_images.each do |image|
+                                  %option{:value => image["id"]}= image["name"]
+                              %label.control-label.col-xs-2{:for => "derivedname"} Custom Image
+                              .col-xs-10
+                              %select#derivedimages.form-control{"data-original-title" => "", :name => "derivedimages", :title => ""}
+                            .btn-group{"data-toggle" => "buttons"}
+                              %label.btn.btn-primary.active
+                                %input#option1{:checked => "", :name => "ispublic", :type => "radio" , :value =>"1" } Public
+                              %label.btn.btn-primary
+                                %input#option2{:name => "ispublic", :type => "radio" , :value =>"0" } Private
+
+                            
+                                
+                            
+                      %li 
+                        %a{:href => "#optionaldetails"} Optional Details
+                        #optionaldetails 
+
+                      %li
+                        %a{:href => "#postlaunch"} Actions after Launch
+                        #postlaunch
+                   
+                  .modal-footer
+                    %button.btn.btn-default{"data-dismiss" => "modal", :type => "button"} Close
+                    %button.btn#createcvm.btn-default{:type => "submit", :value => "LaunchCVM", :class => "btn-primary btn"} Submit
+          
+        %li.dropdown
+          %a.dropdown-toggle{"aria-expanded" => "false", "data-toggle" => "dropdown", :href => "#", :role => "button"}
+            User
+            %span.caret
+          %ul.dropdown-menu{:role => "menu"}
+            %li
+              %a{:href => "#"} Settings
+            %li
+              %a{:href => "#"} Statistics
+            %li 
+              %a{:href => "#"} My Account
+            %li.divider
+            %li
+              %a{:href => "#"} SignOut
+    / /.navbar-collapse
+  / /.container-fluid

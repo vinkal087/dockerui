@@ -1,0 +1,24 @@
+= render 'shared/sidebar'
+= render 'shared/navbar'
+
+#wrapper
+  .panel.panel-default
+  / Default panel contents
+  .panel-heading Images
+  
+  
+  / Table
+  %table.table.table-bordered
+    %thead
+      %tr
+        %th #
+        %th Name
+        %th Description
+        
+    %tbody
+      - @images.each_with_index do |image,index|
+        %tr
+          %td= index+1
+          %td= image['name'] 
+          %td= image['description']
+          

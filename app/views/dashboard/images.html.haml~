@@ -1,0 +1,10 @@
+#wrapper
+  = 'render' 'shared/navbar'
+  .panel.panel-default
+    / Default panel contents
+    .panel-heading ritika
+    .panel-body
+      %p ...
+    / Table
+    %table.table
+      \...
