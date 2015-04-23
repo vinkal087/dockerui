@@ -21,3 +21,6 @@ $(".modal-wide").on("show.bs.modal", function() {
   $(this).find(".modal-body").css("max-height", height);
 });
 
+
+
+

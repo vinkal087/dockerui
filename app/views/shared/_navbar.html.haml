@@ -1,3 +1,17 @@
+:javascript
+  function optiondetail(){
+
+    $('#impdetails').hide();
+    $('#optionaldetails').show();
+   }
+  function impdetails(){
+
+    $('#impdetails').show();
+    $('#optionaldetails').hide();
+  }
+
+
+
 %nav.navbar.navbar-default
   .container-fluid
     / Brand and toggle get grouped for better mobile display
@@ -28,7 +42,7 @@
                   .modal-body
                     %ul.nav.nav-pills
                       %li.active
-                        %a{:href => "#impdetails"} *Important Details
+                        %a{:href => "#impdetails" ,:onclick =>"impdetails();"} *Important Details
                         #impdetails
                           %form#createcvm.form
                             .form-group.required
@@ -56,8 +70,20 @@
                                 
                             
                       %li 
-                        %a{:href => "#optionaldetails"} Optional Details
-                        #optionaldetails 
+                        %a{:href => "#optionaldetails",:onclick =>"optiondetail();"} Optional Details
+                        #optionaldetails{:style => "display:none"}
+                          .form-group.required
+                            %label.control-label{:for => "cpu"}CPU Shares
+                            
+                            %input#inputName.form-control{:placeholder => "CPU shares", :type => "text",:name => "cpu"}
+                            
+                            %label.control-label{:for => "RAM"}RAM
+                            
+                            %input#inputName.form-control{:placeholder => "RAM", :type => "text",:name => "ram"}
+                        
+                        
+
+                        
 
                       %li
                         %a{:href => "#postlaunch"} Actions after Launch
@@ -66,6 +92,7 @@
                   .modal-footer
                     %button.btn.btn-default{"data-dismiss" => "modal", :type => "button"} Close
                     %button.btn#createcvm.btn-default{:type => "submit", :value => "LaunchCVM", :class => "btn-primary btn"} Submit
+        
           
         %li.dropdown
           %a.dropdown-toggle{"aria-expanded" => "false", "data-toggle" => "dropdown", :href => "#", :role => "button"}

@@ -8,6 +8,7 @@ Bundler.require(:default, Rails.env)
 
 module Testfrontend
   class Application < Rails::Application
+     
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
@@ -19,5 +20,23 @@ module Testfrontend
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
+    #config.action_dispatch.default_headers = {
+    #      'Access-Control-Allow-Origin' => 'http://www.google.com',
+    #      'Access-Control-Request-Method' => %w{GET POST OPTIONS}.join(",")
+    #    }
+    #config.middleware.use Rack::Cors do
+    #  allow do
+    #    origins '*'
+    #    resource '*', 
+     #       :headers => :any, 
+     #       :methods => [:get, :post, :delete, :put, :options]
+     # end
+    #end
+    config.middleware.insert_before 0, "Rack::Cors" do
+      allow do
+        origins '*'
+        resource '*', :headers => :any, :methods => [:get, :post, :options]
+      end
+    end
   end
 end

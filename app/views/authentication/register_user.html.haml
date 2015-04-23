@@ -10,18 +10,18 @@
         .row
           .col-xs-6
             .well
-              %form#loginForm{:action => "/authentication/authenticate", :method => "POST", :novalidate => "novalidate"}
+              %form#loginForm{:action => "/authentication/post_register", :method => "POST", :novalidate => "novalidate"}
                 .form-group
                   %label.control-label{:for => "name"} *Name
-                  %input#name.form-control{:name => "name", :placeholder => "example@gmail.com", :required => "", :title => "Please enter your name", :type => "text", :value => ""}
+                  %input#name.form-control{:name => "name",  :required => "", :title => "Please enter your name", :type => "text", :value => ""}
                     %span.help-block
                   .form-group
-                  %label.control-label{:for => "email"} Email
+                  %label.control-label{:for => "email"} *Email
                   %input#email.form-control{:name => "email", :placeholder => "example@gmail.com", :required => "", :title => "Please enter you email", :type => "text", :value => ""}
                     %span.help-block
                 .form-group
                   %label.control-label{:for => "username"} *Username
-                  %input#username.form-control{:name => "username", :placeholder => "example@gmail.com", :required => "", :title => "Please enter you username", :type => "text", :value => ""}
+                  %input#username.form-control{:name => "username",  :required => "", :title => "Please enter you username", :type => "text", :value => ""}
                     %span.help-block
                 .form-group
                   %label.control-label{:for => "password"} *Password

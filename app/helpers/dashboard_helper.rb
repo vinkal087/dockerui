@@ -12,6 +12,7 @@ module DashboardHelper
     @derived_images = JSON.parse(res.body)
     #puts @base_images
   end
-
-
+  def gettablestate
+  @tablestate = Hash["RUNNING" => "success", "KILLED" => "danger", "PAUSED"=> "warning", "STOPPED" => "active"]
+  end
 end

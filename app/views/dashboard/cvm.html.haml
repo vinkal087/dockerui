@@ -1,5 +1,7 @@
+
 = render 'shared/sidebar'
 = render 'shared/navbar'
+
 #wrapper
   .panel.panel-default
   /%nav.navbar.navbar-inverse{:role => "navigation"}
@@ -10,53 +12,76 @@
       %span.icon-bar
       %span.icon-bar
       %span.icon-bar
-    %a.navbar-brand{:href => "#"} CVM Imstanses
+    %button.btn.btn-success{:href => "#tablediv" , :onclick => "cvmlist();", :type => "button"} CVM Imstanses
   
   #navbarCollapse.collapse.navbar-collapse
-    %ul.nav.navbar-nav
-      %li.active
-        %a{:href => "#"} Home
+    %ul#mynavbar.nav.nav-tabs
       %li
-        %a{:href => "#"} Profile
-      %li.dropdown
-        %a.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
-          Actions
-          %b.caret
-        %ul.dropdown-menu{:role => "menu"}
-          %li
-            %a{:href => "#"} upause 
-          %li
-            %a{:href => "#"} pause
-          %li
-            %a{:href => "#"} Suspend
-          %li.divider
-          %li
-            %a{:href => "#"} kill
-    %form.navbar-form.navbar-right{:role => "search"}
-      .form-group
-        %input.form-control{:placeholder => "Search", :type => "text"}
+        %button.btn.btn-warning{:href => "#terminalpanel", :id =>"openterminal" , :onclick =>  "getterminal();",   :type => "button"} Open terminal
+        
+      %li
+        %button.btn.btn-info{:href => "#detailspanel", :onclick => "getdetails();", :type => "button"} Details
+           
+            
+    
+      
+
+     
+      %li.col-lg-4
+        .input-group
+          %input.form-control{:placeholder => "Image Name to commit change", :type => "text"}
+            %span.input-group-btn
+              %button.btn.btn-primary{:type => "button"} Commit
+
+ 
+    #detailspanel{:style => "display:none"} 
+      %ul#detaillist.list-group
+        
+        %li.list-group-item
+
     
         
-    
-  / Table
-  %table.table.table-bordered
-    %thead
-      %tr
-        %th #
-        %th Name
-        %th Owner
-        %th Image
-        %th Status
-        %th Ispublic
-    %tbody
-      - @cvms.each_with_index do |cvm,index|
-        %tr
-          %td
-            %input{:name => "action_cvm", :type => "radio" ,:value => cvm['id']}
-          %td= cvm['container_name'] 
-          %td= cvm['username']
-          %td= cvm['name']
-          %td= cvm['state']
-          %td= cvm['ispublic']
+  #tablediv
+    %form#cvm_getid_form
+      %table#cvmtable.table.table-bordered.table-hover
+        %thead
+          %tr
+            %th #
+            %th Name
+            %th Owner
+            %th Image
+            %th Status
+            %th Action
+            
+        %tbody#cvmtablebody
+          - @cvms.each_with_index do |cvm,index|
+            - tablestate =  gettablestate
+            %tr{ :class => tablestate[cvm['state']]}
+              %td
+                %input{:name => "cvm_radio", :type => "radio" ,:value => cvm['id'], :id => "cvm_radio"}
+              %td= cvm['container_name'] 
+              %td= cvm['username']
+              %td= cvm['name']
+              %td= cvm['state']
+              %td 
+                .btn-group
+                  %button.btn.btn-info.dropdown-toggle{"aria-expanded" => "false", "data-toggle" => "dropdown", :type => "button",:value => cvm['id'],:id => "cvmselected"}
+                    Action
+                    %span.caret  
+                  %ul.dropdown-menu{:role => "menu"}
+                    %li
+                      %a.actionmenu{:href => "#",:value => "1",:id => "option1"} unpause 
+                    %li
+                      %a.actionmenu{:href => "#" , :value => "2", :id => "option2"} pause
+                    %li
+                      %a.actionmenu{:href => "#", :value => "3", :id => "option3" } Suspend
+                    %li.divider
+                    %li
+                      %a.actionmenu{:href => "#",:value =>"5", :id => "option4"} kill
+                    %li
+                      %a.actionmenu{:href => "#",:value => "1", :id => "option5"} Run 
+              
+  %iframe#terminalpanel{:src => 'http://172.27.20.159:4200', :width => "100%", :height =>"600" }
+  
  
    

@@ -1,0 +1,95 @@
+= render 'shared/sidebar'
+= render 'shared/navbar'
+:javascript
+  function getterminal1(){
+  
+   $('#terminalpanel').show();
+  $('#tablediv').hide();
+   alert('vinkal');
+   $.ajax({
+  url: "http://www.fb.com",
+  type: "GET",
+  crossDomain: true
+  }).done(function( data ) {
+    alert(data);
+  });
+   alert('vishnoi');
+  }
+
+
+#wrapper
+  .panel.panel-default
+  /%nav.navbar.navbar-inverse{:role => "navigation"}
+  / Brand and toggle get grouped for better mobile display
+  .navbar-header
+    %button.navbar-toggle{"data-target" => "#navbarCollapse", "data-toggle" => "collapse", :type => "button"}
+      %span.sr-only Toggle navigation
+      %span.icon-bar
+      %span.icon-bar
+      %span.icon-bar
+    %a#cvmlist.navbar-brand{:href => "#wrapper"} CVM Imstanses
+  
+  #navbarCollapse.collapse.navbar-collapse
+    %ul#mynavbar.nav.nav-tabs
+      %li
+        %a{:href => "#terminalpanel", :id =>"openterminal" , :onclick =>  "getterminal1();"} Open terminal
+        
+      %li
+        %a{:href => "#detailspanel"} Details
+      %li.dropdown
+        %a.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
+          Actions
+          %b.caret
+        %ul.dropdown-menu{:role => "menu"}
+          %li
+            %a{:href => "#"} unpause 
+          %li
+            %a{:href => "#"} pause
+          %li
+            %a{:href => "#"} Suspend
+          %li.divider
+          %li
+            %a{:href => "#"} kill
+      %li
+        %form.navbar-form.navbar-right{:role => "search"}
+          .form-group
+            %input.form-control{:placeholder => "Search", :type => "text"}
+    #detailspanel{:style => "display:none"} 
+      %ul#detaillist.list-group
+        
+        %li.list-group-item
+
+          
+    
+    %iframe#terminalpanel{:src => 'https://172.27.20.159:4200/', :width => "100%", :height =>"1200"}
+
+    
+   
+    
+        
+  #tablediv
+    %form#cvm_getid_form
+      %table.table.table-bordered
+        %thead
+          %tr
+            %th #
+            %th Name
+            %th Owner
+            %th Image
+            %th Status
+            %th Ispublic
+        %tbody
+          - @cvms.each_with_index do |cvm,index|
+            %tr
+              %td
+                %input{:name => "action_cvm", :type => "radio" ,:value => cvm['id']}
+              %td= cvm['container_name'] 
+              %td= cvm['username']
+              %td= cvm['name']
+              %td= cvm['state']
+              %td= cvm['ispublic']
+  
+
+  
+ 
+   
