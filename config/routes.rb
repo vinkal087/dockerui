@@ -8,7 +8,9 @@ Testfrontend::Application.routes.draw do
   get "dashboard/hosts"
   get "newhome/index"
   get "myhome/index"
+ 
   #get "dashboard/login"
+  get 'dashboard/getcvmdetails/:id' => 'dashboard#getcvmdetails'
   get 'dashboard/listderivedimages/:id' => 'dashboard#list_derivedimages'
   get 'dashboard/operatecvm/:cvmid/:operation' => 'dashboard#operatecvm'
   post 'dashboard/createcvm' => 'dashboard#create_cvm'

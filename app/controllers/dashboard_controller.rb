@@ -19,7 +19,7 @@ skip_before_filter  :verify_authenticity_token
     tablestate = Hash["RUNNING" => "success", "KILLED" => "danger", "PAUSED"=> "warning", "STOPPED" => "active"]
 	  res = HTTParty.get(APP_CONFIG['REST_API']['SERVER_NAME']+'/api/getcvms')
     @cvms = JSON.parse(res.body)
-    res2 = HTTParty.get(APP_CONFIG['REST_API']['SERVER_NAME']+'/api/getcvmsdetail/')
+    #res2 = HTTParty.get(APP_CONFIG['REST_API']['SERVER_NAME']+'/api/getcvmsdetail/')
 
     puts @cvms
   end
@@ -69,6 +69,13 @@ skip_before_filter  :verify_authenticity_token
   
   def hostip
 
+  end
+
+  def getcvmdetails
+    res = HTTParty.get(APP_CONFIG['REST_API']['SERVER_NAME']+"/api/cvmdetails/#{params[:id]}")
+    res = JSON.parse(res.body)
+    sleep 5
+    render json: res
   end
 end
 

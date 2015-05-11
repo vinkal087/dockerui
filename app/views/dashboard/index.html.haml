@@ -1,4 +1,10 @@
 = render 'shared/sidebar'
 = render 'shared/navbar'
+- flash.each do |key, value|
+  %div#alert{:class => flash_class(key) }
+    %button.close{"data-dismiss" => "alert", :type => "button"} &times;
+    = value
+  :javascript
+    setTimeout("$('#alert').fadeOut('slow')", 5000)
 #wrapper
   

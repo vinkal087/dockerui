@@ -73,6 +73,7 @@
                         %a{:href => "#optionaldetails",:onclick =>"optiondetail();"} Optional Details
                         #optionaldetails{:style => "display:none"}
                           .form-group.required
+                            %div.slider
                             %label.control-label{:for => "cpu"}CPU Shares
                             
                             %input#inputName.form-control{:placeholder => "CPU shares", :type => "text",:name => "cpu"}

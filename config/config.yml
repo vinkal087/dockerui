@@ -1,6 +1,6 @@
 common: &common
   REST_API:
-    SERVER_NAME: http://172.27.20.159
+    SERVER_NAME: http://172.27.20.159:3000
 
 
 development:

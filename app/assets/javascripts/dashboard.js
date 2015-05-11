@@ -21,13 +21,18 @@ $(document).ready(function () {
              $('#detailspanel').hide();
              $('#tablediv').show();
     cvmactiondropdown();
-
+$( ".slider" ).slider( "values", [ 55, 105 ] );
  });
 
 
 function getterminal(){
-	
-   
+  
+  var id = $('#cvm_radio:checked').val();  
+   $.get("/dashboard/getcvmdetails/"+id, function(data){
+     //var data = JSON.parse(data);
+     shellinabox_path = data.SHELLINABOX_PATH;
+     $('#terminalpanel').attr('src', shellinabox_path);
+   });   
    $('#tablediv').hide();
     $('#detailspanel').hide();
    $('#terminalpanel').show();
@@ -66,7 +71,7 @@ function cvmactiondropdown()
   }); 
 
 }
- 
+
 
 
 
