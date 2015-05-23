@@ -1,0 +1,40 @@
+%form.form-inline{:action => "/dashboard/createhost", :name => "createhost", :method => "post"}
+  .col-xs-4
+    .form-group
+      .container
+        .row
+          %label.col-md-2{:for => "Hostname"} HostName:
+          %input.col-md-10#Hostname.form-control{:placeholder => "Enter HostName", :type => "text", :name => "hostname"}
+        .row
+          %label.col-md-2{:for => "ip"} IP:  
+          %input.col-md-10#ip.form-control{ :type => "text", :name =>"ip"}
+        .row
+          %label.col-md-2{:for => "username"} Username:
+          %input.col-md-10#username.form-control{ :type => "text", :name => "username"}
+        .row
+          %label.col-md-2{:for => "password"} Password:
+          %input.col-md-10#password.form-control{ :type => "password", :name => "password"}
+        .row
+          %label.col-md-2{:for => "cpu"} CPU:
+          %input.col-md-10#cpu.form-control{:placeholder => "#Cores ", :type => "text" , :name => "cpu"}
+        .row
+          %label.col-md-2{:for => "ram"} RAM:
+          %input.col-md-10#ram.form-control{:placeholder => "RAM in MB ", :type => "text" , :name =>"ram"} 
+        .row
+          %label.col-md-2{:for => "storage"} Storage:
+          %input.col-md-10#ram.form-control{:placeholder => "Secondary Storage in GB", :type => "text" , :name =>"storage"} 
+        .row
+          %label.col-md-2{:for => "os"} OS:
+          %input.col-md-10#ram.form-control{:placeholder => "Ubuntu", :type => "text" , :name =>"host_os", :default => 'Ubuntu'}
+          /%input.col-md-7#os.form-control.static{ :type => "text"}
+        
+        .row
+          .btn-group{"data-toggle" => "buttons"}
+            %label.btn.btn-default
+              %input#option1{:checked => "", :name => "active", :type => "radio" , :value =>"1" } Active
+            %label.btn.btn-default.active
+              %input#option2{:name => "active", :type => "radio" , :value =>"0" } Disable
+        %br
+        %br
+    %button.btn.btn-primary{:type => "submit"} Submit
+}

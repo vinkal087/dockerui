@@ -9,15 +9,28 @@ function getDerivedImages(id){
 	});
 }
 $(document).ready(function () {
-            $('#terminalpanel').hide();
-            
-             $('#detailspanel').hide();
-             $('#tablediv').show();
+    $('#terminalpanel').hide();        
+    $('#detailspanel').hide();
+    $('#tablediv').show();
     cvmactiondropdown();
 $( ".slider" ).slider( "values", [ 55, 105 ] );
  });
 
 function edithost(){
+  host_id = $('#host_radio:checked').val();
+  $.get("/dashboard/gethostdetails/"+host_id, function(data){
+    var obj = data;
+    $('#edit_hostname').val(obj.hostname);
+    $('#edit_ip').val(obj.ip);
+    $('#edit_username').val(obj.username);
+    $('#edit_password').val(obj.password);
+    $('#edit_cpu').val(obj.cpu);
+    $('#edit_ram').val(obj.ram);
+    $('#edit_storage').val(obj.storage);
+    $('#edit_host_os').val(obj.host_os);
+    $('#edit_active').val(obj.active);
+  });
+
   $('#hosttablediv').hide();
   $('#statisticsdiv').hide();
   $('#edithostdiv').show();

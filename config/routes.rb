@@ -14,6 +14,7 @@ Testfrontend::Application.routes.draw do
   #get "dashboard/login"
   get 'dashboard/getcvmdetails/:id' => 'dashboard#getcvmdetails'
   get 'dashboard/listderivedimages/:id' => 'dashboard#list_derivedimages'
+  get 'dashboard/gethostdetails/:id' => 'dashboard#gethostdetails'
   get 'dashboard/operatecvm/:cvmid/:operation' => 'dashboard#operatecvm'
   post 'dashboard/createcvm' => 'dashboard#create_cvm'
   post 'dashboard/createhost' => 'dashboard#create_host'

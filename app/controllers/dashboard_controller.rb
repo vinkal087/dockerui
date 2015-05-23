@@ -28,6 +28,10 @@ authorize_resource :class => false, :only => [:users,:create_host]
       :body =>{:username => params[:username], :password => params[:password], :cpu => params[:cpu], :ram => params[:ram], :host_os => params[:host_os], :ip => params[:ip], :hostname => params[:hostname], :active => params[:active], :storage => params[:storage] })
     redirect_to :back
   end
+
+  def edit_host
+    
+  end
   
   def create_cvm
     puts params
@@ -60,6 +64,12 @@ authorize_resource :class => false, :only => [:users,:create_host]
   
   def getcvmdetails
     res = HTTParty.get(APP_CONFIG['REST_API']['SERVER_NAME']+"/api/cvmdetails/#{params[:id]}")
+    res = JSON.parse(res.body)
+    render json: res
+  end
+
+  def gethostdetails
+    res = HTTParty.get(APP_CONFIG['REST_API']['SERVER_NAME']+"/api/hostdetails/#{params[:id]}")
     res = JSON.parse(res.body)
     render json: res
   end

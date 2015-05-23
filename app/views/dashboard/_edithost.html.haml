@@ -1,0 +1,40 @@
+%form.form-inline{:action => "/dashboard/createhost", :name => "createhost", :method => "post"}
+  .col-xs-4
+    .form-group
+      .container
+        .row
+          %label.col-md-2{:for => "edit_hostname"} HostName:
+          %input.col-md-10#edit_hostname.form-control{:placeholder => "Enter HostName", :type => "text", :name => "edit_hostname"}
+        .row
+          %label.col-md-2{:for => "edit_ip"} IP:  
+          %input.col-md-10#edit_ip.form-control{ :type => "text", :name =>"edit_ip"}
+        .row
+          %label.col-md-2{:for => "edit_username"} Username:
+          %input.col-md-10#edit_username.form-control{ :type => "text", :name => "edit_username"}
+        .row
+          %label.col-md-2{:for => "edit_password"} Password:
+          %input.col-md-10#edit_password.form-control{ :type => "text", :name => "edit_password"}
+        .row
+          %label.col-md-2{:for => "edit_cpu"} CPU:
+          %input.col-md-10#edit_cpu.form-control{:placeholder => "#Cores ", :type => "text" , :name => "edit_cpu"}
+        .row
+          %label.col-md-2{:for => "edit_ram"} RAM:
+          %input.col-md-10#edit_ram.form-control{:placeholder => "RAM in MB ", :type => "text" , :name =>"edit_ram"} 
+        .row
+          %label.col-md-2{:for => "edit_storage"} Storage:
+          %input.col-md-10#edit_ram.form-control{:placeholder => "Secondary Storage in GB", :type => "text" , :name =>"edit_storage"} 
+        .row
+          %label.col-md-2{:for => "edit_os"} OS:
+          %input.col-md-10#edit_ram.form-control{:placeholder => "Ubuntu", :type => "text" , :name =>"edit_host_os", :default => 'Ubuntu'}
+          /%input.col-md-7#os.form-control.static{ :type => "text"}
+        
+        .row
+          .btn-group{"data-toggle" => "buttons"}
+            %label.btn.btn-default
+              %input#edit_active{:checked => "", :name => "edit_active", :type => "radio" , :value =>"1" } Active
+            %label.btn.btn-default.active
+              %input#edit_active{:name => "edit_active", :type => "radio" , :value =>"0" } Disable
+        %br
+        %br
+    %button.btn.btn-primary{:type => "submit"} Submit
+}
