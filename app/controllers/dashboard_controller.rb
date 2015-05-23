@@ -37,10 +37,15 @@ authorize_resource :class => false, :only => [:users]
     @users = JSON.parse(res.body)
     puts @users
   end
+
+  def create_host
+    puts params
+    redirect_to :back
+  end
   
   def create_cvm
     puts params
-    userid = 5
+    userid = session[:user_id]
     hostid = 1 
     ispublic = params[:ispublic]
    
