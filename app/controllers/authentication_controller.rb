@@ -2,7 +2,7 @@ require 'httparty'
 require 'json'
 class AuthenticationController < ApplicationController
  skip_before_filter  :verify_authenticity_token
- skip_before_filter :authenticate_session, :only=> [:authenticate,:post_authenticate]
+ skip_before_filter :authenticate_session, :only=> [:authenticate,:post_authenticate, :register_user, :post_register]
  @loggedin = Hash["userid" => "" ]
  respond_to :json
   def post_authenticate
