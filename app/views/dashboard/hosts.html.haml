@@ -25,15 +25,17 @@
         %th CPU
         %th OS
       %tbody
-        - @hosts.each_with_index do |host,index|
-          %tr
+        - @hosts.each do |host|
+          - hoststate =  gethoststate
+          %tr{ :class => hoststate[host['active']]}
             %td
               %input{:name => "host_radio", :type => "radio" ,:value => host['id'].to_s, :id => "host_radio"}
             %td= host['hostname'] 
             %td= host['storage']
             %td= host['ram']
             %td= host['cpu'].to_i
-            %td= host['host_os']
+            %td= host['host_os']  
+
   #edithostdiv{:style => "display:none"}
     hi
   #statisticsdiv{:style => "display:none"}
