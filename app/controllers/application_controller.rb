@@ -3,13 +3,12 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   #protect_from_forgery with: :exception
   protect_from_forgery with: :null_session
-  before_filter  :cors_preflight_check
-  after_filter :cors_set_access_control_headers
- 
+ # before_filter  :cors_preflight_check
+ # after_filter :cors_set_access_control_headers
+  before_filter :authenticate_session
 # For all responses in this controller, return the CORS access control headers.
 
 	def cors_set_access_control_headers
-	  puts "vinkal"
 	  headers['Access-Control-Allow-Origin'] = '*'
 	  headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS'
 	  headers['Access-Control-Allow-Headers'] = '*'
@@ -22,7 +21,6 @@ class ApplicationController < ActionController::Base
 	# text/plain.
 
 	def cors_preflight_check
-	  puts "ritika"
 	  if request.method == :options
 	    headers['Access-Control-Allow-Origin'] = '*'
 	    headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS'
@@ -32,4 +30,18 @@ class ApplicationController < ActionController::Base
 	    render :text => '', :content_type => 'text/plain'
 	  end
 	end
+
+
+  def authenticate_session
+  	if session[:user_id].nil?
+  	  flash[:error] = "Please Login to continue"
+      redirect_to "/authentication/authenticate"
+  	else
+  		true
+    end
+  end
+
+  def logout
+  	sesison[:user_id] = nil
+  end
 end
