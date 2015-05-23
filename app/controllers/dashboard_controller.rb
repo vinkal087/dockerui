@@ -2,6 +2,8 @@ require 'httparty'
 require 'json'
 class DashboardController < ApplicationController
 skip_before_filter  :verify_authenticity_token
+authorize_resource :class => false, :only => [:users]
+
   def index
   end
 
@@ -21,7 +23,7 @@ skip_before_filter  :verify_authenticity_token
 
   def cvm
     tablestate = Hash["RUNNING" => "success", "KILLED" => "danger", "PAUSED"=> "warning", "STOPPED" => "active"]
-	  res = HTTParty.get(APP_CONFIG['REST_API']['SERVER_NAME']+'/api/getcvms')
+	  res = HTTParty.get(APP_CONFIG['REST_API']['SERVER_NAME']+"/api/getcvms/#{session[:user_id]}")
     @cvms = JSON.parse(res.body)
     #res2 = HTTParty.get(APP_CONFIG['REST_API']['SERVER_NAME']+'/api/getcvmsdetail/')
 

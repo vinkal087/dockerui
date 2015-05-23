@@ -19,6 +19,7 @@ Testfrontend::Application.routes.draw do
   post 'authentication/postauthenticate' => 'authentication#post_authenticate'
   get 'authentication/register_user' => 'authentication#register_user'
   post 'authentication/post_register' => 'authentication#post_register'
+  get 'authentication/logout' => 'authentication#logout'
   root 'authentication#authenticate'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

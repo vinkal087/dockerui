@@ -12,8 +12,9 @@ class AuthenticationController < ApplicationController
         res = HTTParty.post(APP_CONFIG['REST_API']['SERVER_NAME']+'/api/authenticate',:body =>{:username =>params[:username],:password => hashed_password})
         hash = JSON.parse(res.body)
         if hash['AUTHENTICATION'] == "SUCCESS"
-          session[:user_id] = params[:username]
-          session[:role] = hash[:ROLE]
+          session[:user_id] = hash['USER_ID']
+          session[:username] = params[:username]
+          session[:role] = hash['ROLE']
           redirect_to "/dashboard/index"
         else
             flash[:error] = "Invalid  Username or password"
@@ -26,6 +27,9 @@ class AuthenticationController < ApplicationController
   end
   
   def authenticate
+    if session[:user_id].present?
+      redirect_to "/dashboard/index"
+    end
   end
 
 
@@ -41,6 +45,11 @@ class AuthenticationController < ApplicationController
     @user = res.body
     
   	redirect_to "/authentication/authenticate"
+  end
+
+  def logout
+    session[:user_id] = nil
+    redirect_to "/authentication/authenticate"
   end
 
 end

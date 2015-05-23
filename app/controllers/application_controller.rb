@@ -8,6 +8,11 @@ class ApplicationController < ActionController::Base
   before_filter :authenticate_session
 # For all responses in this controller, return the CORS access control headers.
 
+  rescue_from CanCan::AccessDenied do |exception|
+      #redirect_to "/", :alert => exception.message
+      render :file => 'public/401.html', :status => :unauthorized
+  end
+
 	def cors_set_access_control_headers
 	  headers['Access-Control-Allow-Origin'] = '*'
 	  headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS'
@@ -41,7 +46,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def logout
-  	sesison[:user_id] = nil
+  def current_user
+    return unless session[:user_id]
+    { user_id: session[:user_id], role: session[:role] }
   end
+
+
 end

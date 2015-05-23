@@ -97,7 +97,7 @@
           
         %li.dropdown
           %a.dropdown-toggle{"aria-expanded" => "false", "data-toggle" => "dropdown", :href => "#", :role => "button"}
-            User
+            #{session[:username]}
             %span.caret
           %ul.dropdown-menu{:role => "menu"}
             %li
@@ -108,6 +108,6 @@
               %a{:href => "#"} My Account
             %li.divider
             %li
-              %a{:href => "#"} SignOut
+              %a{:href => "/authentication/logout"} SignOut
     / /.navbar-collapse
   / /.container-fluid
