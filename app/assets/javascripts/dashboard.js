@@ -69,7 +69,10 @@ function cvmactiondropdown()
             }) 
    
    $(".actionmenu").click(function(){
-   	var cvmid = $('#cvm_radio:checked').val();
+   	var data = $('#cvm_radio:checked').val().split('_');
+    
+    var cvmid = parseInt(data[0]);
+   	
    	var operation = $(this).attr('value');
       $.get("/dashboard/operatecvm/"+cvmid+"/"+operation, function(data){
    	alert(data);

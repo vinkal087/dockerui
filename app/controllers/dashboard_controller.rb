@@ -15,6 +15,10 @@ skip_before_filter  :verify_authenticity_token
 
   end
 
+  def image_commit
+     
+  end
+
   def cvm
     tablestate = Hash["RUNNING" => "success", "KILLED" => "danger", "PAUSED"=> "warning", "STOPPED" => "active"]
 	  res = HTTParty.get(APP_CONFIG['REST_API']['SERVER_NAME']+'/api/getcvms')
@@ -68,10 +72,7 @@ skip_before_filter  :verify_authenticity_token
     puts @hosts
   end
   
-  def hostip
-
-  end
-
+  
   def getcvmdetails
     res = HTTParty.get(APP_CONFIG['REST_API']['SERVER_NAME']+"/api/cvmdetails/#{params[:id]}")
     res = JSON.parse(res.body)
