@@ -24,6 +24,10 @@
         %th Ram
         %th CPU
         %th OS
+        %th IP Address
+        - if session[:role] == "ADMIN"
+          %th Username
+          %th Password
       %tbody
         - @hosts.each do |host|
           - hoststate =  gethoststate
@@ -34,7 +38,11 @@
             %td= host['storage']
             %td= host['ram']
             %td= host['cpu'].to_i
-            %td= host['host_os']  
+            %td= host['host_os']
+            %td= host['ip']
+            - if session[:role] == "ADMIN"
+              %td= host['username']
+              %td= host['password']
 
   #edithostdiv{:style => "display:none"}
     hi
@@ -65,16 +73,19 @@
               %label.col-md-2{:for => "ram"} RAM:
               %input.col-md-10#ram.form-control{:placeholder => "RAM in MB ", :type => "text" , :name =>"ram"} 
             .row
+              %label.col-md-2{:for => "storage"} Storage:
+              %input.col-md-10#ram.form-control{:placeholder => "Secondary Storage in GB", :type => "text" , :name =>"storage"} 
+            .row
               %label.col-md-2{:for => "os"} OS:
-              %p.col-md-10.form-control-static Ubuntu
+              %input.col-md-10#ram.form-control{:placeholder => "Ubuntu", :type => "text" , :name =>"host_os", :default => 'Ubuntu'}
               /%input.col-md-7#os.form-control.static{ :type => "text"}
             
             .row
               .btn-group{"data-toggle" => "buttons"}
                 %label.btn.btn-default
-                  %input#option1{:checked => "", :name => "isactive", :type => "radio" , :value =>"1" } Active
+                  %input#option1{:checked => "", :name => "active", :type => "radio" , :value =>"1" } Active
                 %label.btn.btn-default.active
-                  %input#option2{:name => "isactive", :type => "radio" , :value =>"0" } Disable
+                  %input#option2{:name => "active", :type => "radio" , :value =>"0" } Disable
             %br
             %br
         %button.btn.btn-primary{:type => "submit"} Submit

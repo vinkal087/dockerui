@@ -2,44 +2,30 @@ require 'httparty'
 require 'json'
 class DashboardController < ApplicationController
 skip_before_filter  :verify_authenticity_token
-authorize_resource :class => false, :only => [:users]
+authorize_resource :class => false, :only => [:users,:create_host]
 
   def index
   end
 
-
-  
-
   def images
-	res = HTTParty.get(APP_CONFIG['REST_API']['SERVER_NAME']+'/api/getbaseimages')
+	  res = HTTParty.get(APP_CONFIG['REST_API']['SERVER_NAME']+'/api/getbaseimages')
     @images = JSON.parse(res.body)
-    puts @images
-
   end
-
-  
 
   def cvm
     tablestate = Hash["RUNNING" => "success", "KILLED" => "danger", "PAUSED"=> "warning", "STOPPED" => "active"]
-
 	  res = HTTParty.get(APP_CONFIG['REST_API']['SERVER_NAME']+"/api/getcvms/#{session[:user_id]}")
-
-	 
     @cvms = JSON.parse(res.body)
-    #res2 = HTTParty.get(APP_CONFIG['REST_API']['SERVER_NAME']+'/api/getcvmsdetail/')
-
-    puts @cvms
-
   end
 
   def users
   	res = HTTParty.get(APP_CONFIG['REST_API']['SERVER_NAME']+'/api/getusers')
     @users = JSON.parse(res.body)
-    puts @users
   end
 
   def create_host
-    puts params
+    HTTParty.post(APP_CONFIG['REST_API']['SERVER_NAME']+'/api/addhost',
+      :body =>{:username => params[:username], :password => params[:password], :cpu => params[:cpu], :ram => params[:ram], :host_os => params[:host_os], :ip => params[:ip], :hostname => params[:hostname], :active => params[:active], :storage => params[:storage] })
     redirect_to :back
   end
   
@@ -48,21 +34,12 @@ authorize_resource :class => false, :only => [:users]
     userid = session[:user_id]
     hostid = 1 
     ispublic = params[:ispublic]
-   
-    #url = "APP_CONFIG['REST_API']['SERVER_NAME']/api/createcvm/
-    #       user/#{userid}/image/#{params[:image]}/cvmname/#{params[:cvmname]}/
-    #       public/#{ispublic}/host/#{hostid}/cpu/#{params[:cpu]}/memory/#{params[:ram]}"
      HTTParty.post(APP_CONFIG['REST_API']['SERVER_NAME']+'/api/createcvm',
       :body =>{:userid => userid, :imageid =>params[:image], :cvmname => params[:cvmname],
                :hostid => hostid, :cpu => params[:cpu],:memory => params[:ram], :public =>ispublic})
-    #res =HTTParty.get(url)
-    #puts JSON.parse(res.body)
-    
-    #flash[:notice] = "Post successfully created"
     redirect_to :back
-        
-    #render :layout => "/dashboard/index"
   end
+
   def list_derivedimages
     res = HTTParty.get(APP_CONFIG['REST_API']['SERVER_NAME']+"/api/getderivedimages/#{params[:id]}")
     #@derived_images = JSON.parse(res.body)
@@ -78,14 +55,12 @@ authorize_resource :class => false, :only => [:users]
     hoststate = Hash["true" => "success", "false" => "danger"]
   	res = HTTParty.get(APP_CONFIG['REST_API']['SERVER_NAME']+'/api/gethosts')
     @hosts = JSON.parse(res.body)
-    puts @hosts
   end
   
   
   def getcvmdetails
     res = HTTParty.get(APP_CONFIG['REST_API']['SERVER_NAME']+"/api/cvmdetails/#{params[:id]}")
     res = JSON.parse(res.body)
-    
     render json: res
   end
 end
