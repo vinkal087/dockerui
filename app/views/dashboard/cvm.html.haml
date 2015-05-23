@@ -29,7 +29,7 @@
      
       %li.col-lg-4
         .input-group
-          %input.form-control{:placeholder => "Image Name to commit change", :type => "text"}
+          %input.form-control{:placeholder => "Commit Name", :type => "text"}
             %span.input-group-btn
               %button.btn.btn-primary{:type => "button"} Commit
 
@@ -58,7 +58,7 @@
             - tablestate =  gettablestate
             %tr{ :class => tablestate[cvm['state']]}
               %td
-                %input{:name => "cvm_radio", :type => "radio" ,:value => cvm['id'], :id => "cvm_radio"}
+                %input{:name => "cvm_radio", :type => "radio" ,:value => cvm['id'].to_s+ "_"+cvm['ip'], :id => "cvm_radio"}
               %td= cvm['container_name'] 
               %td= cvm['username']
               %td= cvm['name']
@@ -80,7 +80,7 @@
                     %li
                       %a.actionmenu{:href => "#",:value => "1", :id => "option5"} Start 
               
-  %iframe#terminalpanel{:src => 'http://172.27.20.159:4200', :width => "100%", :height =>"600" }
+  %iframe#terminalpanel{ :width => "100%", :height =>"600" }
   
  
    

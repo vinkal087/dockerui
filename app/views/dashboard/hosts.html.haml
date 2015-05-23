@@ -6,30 +6,44 @@
   .panel-heading Hosts
   
   .btn-group{"aria-label" => "...", :role => "group"}
-    %button.btn.btn-default{:type => "button"} Statistics
+    %button#statistics.btn.btn-default{:type => "button", :href => "#statisticsdiv", :onclick => "getstatistics();" } Statistics
    
     .btn-group{:role => "group"}
-      %button.btn.btn-default.dropdown-toggle{"aria-expanded" => "false", "data-toggle" => "dropdown", :type => "button"}Actions
+      %button#action.btn.btn-default.dropdown-toggle{"aria-expanded" => "false", "data-toggle" => "dropdown", :type => "button"}Actions
 
       %ul.dropdown-menu{:role => "menu"}
         %li
           %a{:href => "#"} Dropdown link
         %li
           %a{:href => "#"} Dropdown link 
+    .btn-group{:role => "group"}
+      %button#addhost.btn.btn-default.dropdown-toggle{ :type => "button", :href => "#addhostdiv", :onclick => "addhost();"}ADD Host
+    .btn-group{:role => "group"}
+      %button#edithost.btn.btn-default.dropdown-toggle{ :type => "button", :href => "#edithostdiv", :onclick => "edithost();"}Edit Host
   / Table
-  %table.table.table-bordered
-    %thead
+  #hosttablediv
+    %table#hosttable.table.table-bordered.table-hover
       %tr
         %th #
         %th Name
         %th Storage
         %th Ram
+        %th CPU
         %th OS
-    %tbody
-      - @hosts.each_with_index do |host,index|
-        %tr
-          %td= index+1
-          %td= host['hostname'] 
-          %td= host['storage']
-          %td= host['ram']
-          %td= host['host_os']
+      %tbody
+        - @hosts.each_with_index do |host,index|
+          %tr
+            %td
+              %input{:name => "host_radio", :type => "radio" ,:value => host['id'].to_s, :id => "host_radio"}
+            %td= host['hostname'] 
+            %td= host['storage']
+            %td= host['ram']
+            %td= host['cpu'].to_i
+            %td= host['host_os']
+  #edithostdiv{:style => "display:none"}
+    hi
+  #statisticsdiv{:style => "display:none"}
+
+  #addhostdiv{:style => "display:none"}
+
+

@@ -22,6 +22,7 @@ skip_before_filter  :verify_authenticity_token
     #res2 = HTTParty.get(APP_CONFIG['REST_API']['SERVER_NAME']+'/api/getcvmsdetail/')
 
     puts @cvms
+
   end
 
   def users
@@ -33,7 +34,7 @@ skip_before_filter  :verify_authenticity_token
   def create_cvm
     puts params
     userid = 5
-    hostid = Random.new.rand(1..2).to_s 
+    hostid = 1 
     ispublic = params[:ispublic]
    
     #url = "APP_CONFIG['REST_API']['SERVER_NAME']/api/createcvm/
@@ -74,7 +75,7 @@ skip_before_filter  :verify_authenticity_token
   def getcvmdetails
     res = HTTParty.get(APP_CONFIG['REST_API']['SERVER_NAME']+"/api/cvmdetails/#{params[:id]}")
     res = JSON.parse(res.body)
-    sleep 5
+    
     render json: res
   end
 end

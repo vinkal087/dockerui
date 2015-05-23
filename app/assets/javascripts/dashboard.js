@@ -23,16 +23,22 @@ $(document).ready(function () {
     cvmactiondropdown();
 $( ".slider" ).slider( "values", [ 55, 105 ] );
  });
-
+function edithost(){
+  $('hosttablediv').hide();
+  $('statisticsdiv').hide();
+  $('edithostdiv').show();
+  $('addhostdiv').hide();
+  alert("hi");
+}
 
 function getterminal(){
-  
-  var id = $('#cvm_radio:checked').val();  
-   $.get("/dashboard/getcvmdetails/"+id, function(data){
-     //var data = JSON.parse(data);
-     shellinabox_path = data.SHELLINABOX_PATH;
-     $('#terminalpanel').attr('src', shellinabox_path);
-   });   
+  $('#terminalpanel').attr('src',"");
+  var data = $('#cvm_radio:checked').val().split('_');
+  var ip  = "http://"+data[1];
+  var port = parseInt(data[0]) + 25001;
+  var url = (ip+":"+port);
+  $('#terminalpanel').attr('src',url);
+     
    $('#tablediv').hide();
     $('#detailspanel').hide();
    $('#terminalpanel').show();
