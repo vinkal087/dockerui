@@ -11,9 +11,10 @@
       Hosts
     %button#statistics.btn.btn-danger{:type => "button", :href => "#statisticsdiv", :onclick => "getstatistics();" } Statistics
     
-    %button#addhost.btn.btn-warning.dropdown-toggle{ :type => "button", :href => "#addhostdiv", :onclick => "addhost();"}ADD Host
+    - if session[:role] == "ADMIN"
+      %button#addhost.btn.btn-warning.dropdown-toggle{ :type => "button", :href => "#addhostdiv", :onclick => "addhost();"}ADD Host
     
-    %button#edithost.btn.btn-success.dropdown-toggle{ :type => "button", :href => "#edithostdiv", :onclick => "edithost();"}Edit Host
+      %button#edithost.btn.btn-success.dropdown-toggle{ :type => "button", :href => "#edithostdiv", :onclick => "edithost();"}Edit Host
   / Table
   #hosttablediv
     %table#hosttable.table.table-bordered.table-hover
