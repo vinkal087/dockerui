@@ -75,6 +75,7 @@ authorize_resource :class => false, :only => [:users]
   end
 
   def hosts
+    hoststate = Hash["true" => "success", "false" => "danger"]
   	res = HTTParty.get(APP_CONFIG['REST_API']['SERVER_NAME']+'/api/gethosts')
     @hosts = JSON.parse(res.body)
     puts @hosts
