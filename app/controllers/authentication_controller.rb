@@ -10,7 +10,7 @@ class AuthenticationController < ApplicationController
   	hashed_password = Digest::SHA1.hexdigest(params[:password])
   	#auth = {:username => params[:username], :password => params[:password]}
     auth = {:username => "ritikavr", :password => "ritika"}
-  	res = HTTParty.post('http://172.27.20.159:3000/api/authenticate',
+  	res = HTTParty.post(APP_CONFIG['REST_API']['SERVER_NAME']+'/api/authenticate',
       :body =>{:username =>params[:username],:password => hashed_password})
   	#JSON.parse(res.body)
     puts res.body
@@ -35,7 +35,7 @@ class AuthenticationController < ApplicationController
 
   def post_register
   	hashed_password = Digest::SHA1.hexdigest(params[:password])
-  	res = HTTParty.post('http://172.27.20.159:3000/api/adduser', 
+  	res = HTTParty.post(APP_CONFIG['REST_API']['SERVER_NAME']+'/api/adduser', 
   		:body => { :username => params[:username], :pwd => hashed_password,
   		 :email =>params[:email], :name => params[:name]})
   	#puts res.body
