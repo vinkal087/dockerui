@@ -24,12 +24,35 @@ $(document).ready(function () {
 $( ".slider" ).slider( "values", [ 55, 105 ] );
  });
 function edithost(){
-  $('hosttablediv').hide();
-  $('statisticsdiv').hide();
-  $('edithostdiv').show();
-  $('addhostdiv').hide();
-  alert("hi");
+  $('#hosttablediv').hide();
+  $('#statisticsdiv').hide();
+  $('#edithostdiv').show();
+  $('#addhostdiv').hide();
+  
 }
+function gethosts(){
+  $('#hosttablediv').show();
+  $('#statisticsdiv').hide();
+  $('#edithostdiv').hide();
+  $('#addhostdiv').hide();
+
+}
+function addhost(){
+  $('#hosttablediv').hide();
+  $('#statisticsdiv').hide();
+  $('#edithostdiv').hide();
+  $('#addhostdiv').show();
+  
+}
+function getstatistics(){
+  $('#hosttablediv').hide();
+  $('#statisticsdiv').show();
+  $('#edithostdiv').hide();
+  $('#addhostdiv').hide();
+  
+}
+
+
 
 function getterminal(){
   $('#terminalpanel').attr('src',"");

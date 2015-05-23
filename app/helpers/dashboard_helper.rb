@@ -13,6 +13,6 @@ module DashboardHelper
     #puts @base_images
   end
   def gettablestate
-  @tablestate = Hash["RUNNING" => "success", "KILLED" => "danger", "PAUSED"=> "warning", "STOPPED" => "active"]
+  @tablestate = Hash["RUNNING" => "success", "KILLED" => "danger", "PAUSED"=> "warning", "STOPPED" => "danger"]
   end
 end

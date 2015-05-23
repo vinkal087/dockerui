@@ -3,23 +3,17 @@
 #wrapper
   .panel.panel-default
   / Default panel contents
-  .panel-heading Hosts
+  /.panel-heading Hosts
   
   .btn-group{"aria-label" => "...", :role => "group"}
-    %button#statistics.btn.btn-default{:type => "button", :href => "#statisticsdiv", :onclick => "getstatistics();" } Statistics
-   
-    .btn-group{:role => "group"}
-      %button#action.btn.btn-default.dropdown-toggle{"aria-expanded" => "false", "data-toggle" => "dropdown", :type => "button"}Actions
-
-      %ul.dropdown-menu{:role => "menu"}
-        %li
-          %a{:href => "#"} Dropdown link
-        %li
-          %a{:href => "#"} Dropdown link 
-    .btn-group{:role => "group"}
-      %button#addhost.btn.btn-default.dropdown-toggle{ :type => "button", :href => "#addhostdiv", :onclick => "addhost();"}ADD Host
-    .btn-group{:role => "group"}
-      %button#edithost.btn.btn-default.dropdown-toggle{ :type => "button", :href => "#edithostdiv", :onclick => "edithost();"}Edit Host
+    %button#hostlist.btn.btn-info{:type => "button", :href => "#hosttablediv", :onclick => "gethosts();" } 
+      %span.glyphicon.glyphicon-th-list{"aria-hidden" => "true"}
+      Hosts
+    %button#statistics.btn.btn-danger{:type => "button", :href => "#statisticsdiv", :onclick => "getstatistics();" } Statistics
+    
+    %button#addhost.btn.btn-warning.dropdown-toggle{ :type => "button", :href => "#addhostdiv", :onclick => "addhost();"}ADD Host
+    
+    %button#edithost.btn.btn-success.dropdown-toggle{ :type => "button", :href => "#edithostdiv", :onclick => "edithost();"}Edit Host
   / Table
   #hosttablediv
     %table#hosttable.table.table-bordered.table-hover
@@ -45,5 +39,36 @@
   #statisticsdiv{:style => "display:none"}
 
   #addhostdiv{:style => "display:none"}
-
+    %br  
+    %form.form-inline
+      .col-xs-4
+        .form-group
+          .container
+            .row
+              %label.col-md-2{:for => "Hostname"} HostName:
+              %input.col-md-10#Hostname.form-control{:placeholder => "Enter HostName", :type => "text"}
+            .row
+              %label.col-md-2{:for => "ip"} IP:  
+              %input.col-md-10#ip.form-control{ :type => "text"}
+            .row
+              %label.col-md-2{:for => "username"} Username:
+              %input.col-md-10#username.form-control{ :type => "text"}
+            .row
+              %label.col-md-2{:for => "password"} Password:
+              %input.col-md-10#password.form-control{ :type => "password"}
+            .row
+              %label.col-md-2{:for => "cpu"} CPU:
+              %input.col-md-10#cpu.form-control{:placeholder => "#Cores ", :type => "text"}
+            .row
+              %label.col-md-2{:for => "ram"} RAM:
+              %input.col-md-10#ram.form-control{:placeholder => "RAM in MB ", :type => "text"} 
+            .row
+              %label.col-md-2{:for => "os"} OS:
+              %p.col-md-10.form-control-static Ubuntu
+              /%input.col-md-7#os.form-control.static{ :type => "text"}
+            .row
+              %input#chekboxactive{:type => "checkbox", :value => ""}
+              %label{:for => "ram"} Active
+              
+        %button.btn.btn-primary{:type => "submit"} Submit
 
