@@ -1,6 +1,5 @@
 Testfrontend::Application.routes.draw do
-  get "hosts/add_new_host"
-  get "hosts/edit_host"
+
   get "authentication/authenticate"
 
   get "dashboard/index"

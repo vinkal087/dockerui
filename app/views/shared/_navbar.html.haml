@@ -94,6 +94,14 @@
                                 %option{:value => "low"} LOW (upto 30%) 
                                 %option{:value => "average"} Average (31% - 70%)
                                 %option{:value => "High"} High (71% - 100%)
+                            %br
+                            .row
+                              %label{:for => "specifiedhost"} Specified Host(optional)
+                              %select#imagename.form-control{"data-original-title" => "", :name => "image", :title => ""}
+                                %option{:value => "select"} --Select-- 
+                                - hosts_active = get_active_hosts
+                                - hosts_active.each do |host|
+                                  %option{:value => host["id"]}= host["hostname"]
                         
 
                         
