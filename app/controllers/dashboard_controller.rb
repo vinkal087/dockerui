@@ -30,7 +30,22 @@ authorize_resource :class => false, :only => [:users,:create_host]
   end
 
   def edit_host
-    
+    hash = {}
+    hostid = params[:edit_hostid]
+    hash[:username] = params[:edit_username]
+    #hash[:password] = params[:edit_password]
+    hash[:cpu] = params[:edit_cpu]
+    hash[:ram] = params[:edit_ram] 
+    hash[:host_os] = params[:edit_host_os] 
+    hash[:ip] = params[:edit_ip] 
+    hash[:hostname] = params[:edit_hostname]
+    hash[:active] = params[:edit_active] 
+    hash[:storage] = params[:edit_storage] 
+    new_param = {}
+    new_param[:values] = hash
+    HTTParty.post(APP_CONFIG['REST_API']['SERVER_NAME']+"/api/edithost/#{hostid}",:body => new_param)
+    redirect_to :back
+
   end
   
   def create_cvm

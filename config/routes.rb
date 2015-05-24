@@ -18,6 +18,7 @@ Testfrontend::Application.routes.draw do
   get 'dashboard/operatecvm/:cvmid/:operation' => 'dashboard#operatecvm'
   post 'dashboard/createcvm' => 'dashboard#create_cvm'
   post 'dashboard/createhost' => 'dashboard#create_host'
+  post 'dashboard/edithost' => 'dashboard#edit_host'
   post 'authentication/postauthenticate' => 'authentication#post_authenticate'
   get 'authentication/register_user' => 'authentication#register_user'
   post 'authentication/post_register' => 'authentication#post_register'

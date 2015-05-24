@@ -20,6 +20,7 @@ function edithost(){
   host_id = $('#host_radio:checked').val();
   $.get("/dashboard/gethostdetails/"+host_id, function(data){
     var obj = data;
+    $('#edit_hostid').val(host_id);
     $('#edit_hostname').val(obj.hostname);
     $('#edit_ip').val(obj.ip);
     $('#edit_username').val(obj.username);
@@ -28,7 +29,12 @@ function edithost(){
     $('#edit_ram').val(obj.ram);
     $('#edit_storage').val(obj.storage);
     $('#edit_host_os').val(obj.host_os);
-    $('#edit_active').val(obj.active);
+    if(obj.active == 1){ 
+      $('input[name=edit_active][value=1]').prop('checked',true)
+    }
+    else{
+      $('input[name=edit_active][value=0]').prop('checked',true);
+    }
   });
 
   $('#hosttablediv').hide();
