@@ -15,6 +15,9 @@
 //= require jquery-ui
 //= require turbolinks
 //= require bootstrap-sprockets
+//= require rickshaw_with_d3
+//= require d3.v2
+//= require rickshaw
 //= require_tree .
 
 

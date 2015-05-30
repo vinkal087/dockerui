@@ -11,6 +11,7 @@ Testfrontend::Application.routes.draw do
   get "myhome/index"
  
   #get "dashboard/login"
+  
   get 'dashboard/getcvmdetails/:id' => 'dashboard#getcvmdetails'
   get 'dashboard/listderivedimages/:id' => 'dashboard#list_derivedimages'
   get 'dashboard/gethostdetails/:id' => 'dashboard#gethostdetails'

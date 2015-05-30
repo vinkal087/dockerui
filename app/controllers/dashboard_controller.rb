@@ -1,12 +1,13 @@
 require 'httparty'
 require 'json'
+require 'influxdb'
 class DashboardController < ApplicationController
 skip_before_filter  :verify_authenticity_token
 authorize_resource :class => false, :only => [:users,:create_host]
 
   def index
   end
-
+  
   def images
 	  res = HTTParty.get(APP_CONFIG['REST_API']['SERVER_NAME']+'/api/getbaseimages')
     @images = JSON.parse(res.body)

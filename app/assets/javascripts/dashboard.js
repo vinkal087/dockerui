@@ -107,8 +107,43 @@ function cvmactiondropdown()
 }
 
 
+function showgraph() {
+  
+ 
+  var influxdb = new InfluxDB({
+  "host" :"172.27.20.159",
+  "port" :"8086",
+  "username" :"ritika",
+  "password" :"ritika",
+  "database" :"stats"
+   });
+   
+  influxdb.query("select cpu_all from hostname4_cpu_172.27.20.163;", function(points) {
+    
+    var data = points.map(function(point) {
+      console.log(point['points']['time']/ 1000);
+      return { x: point['points']['time']/ 1000, y: point['points']['cpu_all'] };
+    }).reverse();
+   
+    console.log(data);
+  
+  var graph = new Rickshaw.Graph({
+      element: document.querySelector("#graph"),
+      width: 640,
+      height: 200,
+      renderer: 'line',
+      series: [{ data: data, color: 'steelblue' }]
+    });
 
+    var xAxis = new Rickshaw.Graph.Axis.Time({ graph: graph });
+    var yAxis = new Rickshaw.Graph.Axis.Y({
+      graph: graph,
+      orientation: 'left',
+      element: document.getElementById('y_axis')
+    });
 
-
-
-
+    xAxis.render();
+    yAxis.render();
+    graph.render();
+   });
+}

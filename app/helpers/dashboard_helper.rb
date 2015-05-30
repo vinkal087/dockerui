@@ -22,4 +22,5 @@ module DashboardHelper
   def gethoststate
   @hoststate = Hash[ true => "success", false => "danger"]
   end
+  
 end
