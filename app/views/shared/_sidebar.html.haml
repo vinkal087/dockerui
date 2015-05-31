@@ -24,11 +24,11 @@
             
          
         
-       
-        %li
-          %a{:href => "/dashboard/users"}
-            %i.fa.fa-user.fa-lg
-            Users
+        - if session[:role] == "ADMIN"
+          %li
+            %a{:href => "/dashboard/users"}
+              %i.fa.fa-user.fa-lg
+              Users
         %li
           %a{:href => "#"}
             %i.fa.fa-users.fa-lg

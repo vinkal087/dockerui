@@ -24,19 +24,23 @@
            
             
     
-      
-
-     
-      
-
- 
     #detailspanel{:style => "display:none"} 
-      %ul#detaillist.list-group
-        
-        %li.list-group-item
-
-    
-        
+      %table#cvmtable.table.table-bordered.table-hover
+        %tr
+          %td UserName :
+          %td #{session[:username]}
+        %tr
+          %td Password :
+          %td #{session[:username]}
+        %tr 
+          %td SSH IP :
+          %td 
+            %label#details_sship
+        %tr
+          %td SSH Port :
+          %td
+            %label#details_sshport 
+   
   #tablediv
     %form#cvm_getid_form
       %table#cvmtable.table.table-bordered.table-hover

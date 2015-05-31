@@ -55,7 +55,7 @@ authorize_resource :class => false, :only => [:users,:create_host]
     hostid = 1 
     ispublic = params[:ispublic]
      HTTParty.post(APP_CONFIG['REST_API']['SERVER_NAME']+'/api/createcvm',
-      :body =>{:userid => userid, :imageid =>params[:image], :cvmname => params[:cvmname],
+      :body =>{:userid => userid, :imageid =>params[:derivedimages], :cvmname => params[:cvmname],
                :hostid => hostid, :cpu => params[:cpu],:memory => params[:ram], :public =>ispublic})
     redirect_to :back
   end

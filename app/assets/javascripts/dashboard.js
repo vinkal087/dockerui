@@ -68,7 +68,7 @@ function getterminal(){
   $('#terminalpanel').attr('src',"");
   var data = $('#cvm_radio:checked').val().split('_');
   var ip  = "http://"+data[1];
-  var port = parseInt(data[0]) + 25001;
+  var port = parseInt(data[0])*2 + 25001;
   var url = (ip+":"+port);
   $('#terminalpanel').attr('src',url);   
   $('#tablediv').hide();
@@ -77,7 +77,12 @@ function getterminal(){
 }
 
 function getdetails(){
-	var id = $('#cvm_radio:checked').val();
+	var data = $('#cvm_radio:checked').val().split('_');
+  var ip  = data[1];
+  
+  var port = parseInt(data[0])*2 + 25000;
+   $('#details_sship').text(ip);
+   $('#details_sshport').text(port);
    $('#terminalpanel').hide();
    $('#tablediv').hide();
    $('#detailspanel').show();
@@ -119,18 +124,18 @@ function showgraph() {
    });
    
   influxdb.query("select cpu_all from hostname4_cpu_172.27.20.163;", function(points) {
-    
-    var data = points.map(function(point) {
-      console.log(point['points']['time']/ 1000);
-      return { x: point['points']['time']/ 1000, y: point['points']['cpu_all'] };
+     points = points[0].points
+     console.log(points);
+      var data = points.map(function(point) {
+      return { x: point.time/ 1000, y: point.cpu_all };
     }).reverse();
    
     console.log(data);
   
   var graph = new Rickshaw.Graph({
-      element: document.querySelector("#graph"),
+      element: document.querySelector("#chart"),
       width: 640,
-      height: 200,
+      height: 180,
       renderer: 'line',
       series: [{ data: data, color: 'steelblue' }]
     });
