@@ -58,6 +58,8 @@ function addhost(){
   
 }
 function getstatistics(){
+  var host_id = $('#host_radio:checked').val();
+  createGraphforhost(host_id, "host",8);
   $('#hosttablediv').hide();
   $('#statisticsdiv').show();
   $('#edithostdiv').hide();
@@ -105,10 +107,11 @@ function cvmactiondropdown()
     var cvmid = parseInt(data[0]);
    	var operation = $(this).attr('value');
       $.get("/dashboard/operatecvm/"+cvmid+"/"+operation, function(data){
-   	alert(data);
+   	
    });
-  }); 
 
+  }); 
+ //location.reload();
 }
 
 
@@ -123,7 +126,7 @@ function showgraph() {
   "database" :"stats"
    });
    
-  influxdb.query("select cpu_all from hostname4_cpu_172.27.20.163;", function(points) {
+  influxdb.query("select cpu_all from hostname4_cpu_172.27.20.163  ;", function(points) {
      points = points[0].points
      console.log(points);
       var data = points.map(function(point) {
@@ -151,4 +154,73 @@ function showgraph() {
     yAxis.render();
     graph.render();
    });
+}
+
+
+function createGraphforhost(id, type, numberofcores){
+var palette = new Rickshaw.Color.Palette();
+  var tv = 1000;
+  jsonarray = [];
+  for(var i=0;i<numberofcores;i++){
+    jsondata = {};
+    jsondata["name"]="core_"+i.toString();
+   // jsondata['color']= palette.color();
+    //jsonarray.push(jsondata);
+  }
+  jsondata = {};
+  jsondata["name"] = "cpu_all";
+  //jsondata['color']= palette.color();
+  jsonarray.push(jsondata);
+  //alert(JSON.stringify(jsonarray));
+  
+  var throughput = new Rickshaw.Graph({
+    element: document.querySelector("#throughput_chart"),
+    width: "600",
+    height: "380",
+    renderer: "line",
+    series: new Rickshaw.Series.FixedDuration(jsonarray, undefined, {
+        timeInterval: tv,
+        maxDataPoints: 200,
+        timeBase: new Date().getTime() / 1000
+    })
+   });
+  var xAxis = new Rickshaw.Graph.Axis.Time({ graph: throughput});
+    var yAxis = new Rickshaw.Graph.Axis.Y({
+      graph: throughput,
+      orientation: 'left',
+
+    });
+
+
+    xAxis.render();
+    yAxis.render();
+  setInterval(function () {
+    addRandomData(throughput,id, type,jsonarray);
+    throughput.render();
+  }, tv);
+}
+
+function addRandomData(chart, id , type, jsonarray) {
+  if(type == "host")
+  {
+    $.get("/dashboard/lastinfluxdata/"+id, function(rdata){
+       //console.log(JSON.stringify(rdata));
+       for(var i=0;i<jsonarray.length;i++){
+        data = {};
+        console.log(jsonarray[i].name + "  " + rdata[jsonarray[i].name])
+        data[jsonarray[i].name] = rdata[jsonarray[i].name];
+        chart.series.addData(data);
+       }
+    /*  var data = {
+        core_0: rdata.core_0
+    };
+    chart.series.addData(data);
+    var data = {
+        cpu_all: rdata.core_1
+    };
+    chart.series.addData(data);*/
+    });
+  }
+
+    
 }

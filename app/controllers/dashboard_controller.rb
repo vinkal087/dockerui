@@ -89,6 +89,14 @@ authorize_resource :class => false, :only => [:users,:create_host]
     res = JSON.parse(res.body)
     render json: res
   end
+
+  def get_latest_data_from_influx
+    res = HTTParty.get(APP_CONFIG['REST_API']['SERVER_NAME']+"/api/lastinfluxdata/#{params[:id]}")
+    res = JSON.parse(res.body)
+    render json: res
+
+
+  end
 end
 
 

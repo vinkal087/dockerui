@@ -186,10 +186,12 @@ body {
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 30px;
+  width: 40px;
 }
-#y_axis > svg {  
-  padding-bottom: 20px;
+#x_axis {
+  position: relative;
+  left: 40px;
+  height: 40px;
 }
 .x_tick {
   bottom: -15px !important;
