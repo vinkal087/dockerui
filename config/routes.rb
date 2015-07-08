@@ -24,6 +24,9 @@ Testfrontend::Application.routes.draw do
   post 'authentication/post_register' => 'authentication#post_register'
   get 'authentication/logout' => 'authentication#logout'
   get 'dashboard/lastinfluxdata/:id' => 'dashboard#get_latest_data_from_influx'
+  get 'dashboard/lastinfluxdatamem/:id' => 'dashboard#get_latest_data_from_influx_mem'
+  get 'dashboard/lastinfluxcvmdata/:id' => 'dashboard#get_latest_cvm_data_from_influx'
+  get 'dashboard/lastinfluxcvmdatamem/:id' => 'dashboard#get_latest_cvm_data_from_influx_mem'
   root 'authentication#authenticate'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

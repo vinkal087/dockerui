@@ -59,7 +59,9 @@ function addhost(){
 }
 function getstatistics(){
   var host_id = $('#host_radio:checked').val();
-  createGraphforhost(host_id, "host",8);
+  createGraphforcpuhost(host_id,8);
+  createGraphformemhost(host_id);
+  
   $('#hosttablediv').hide();
   $('#statisticsdiv').show();
   $('#edithostdiv').hide();
@@ -76,6 +78,7 @@ function getterminal(){
   $('#tablediv').hide();
   $('#detailspanel').hide();
   $('#terminalpanel').show();
+  $('#statisticspanel').hide();
 }
 
 function getdetails(){
@@ -88,6 +91,7 @@ function getdetails(){
    $('#terminalpanel').hide();
    $('#tablediv').hide();
    $('#detailspanel').show();
+   $('#statisticspanel').hide();
 }
 
 function cvmlist(){
@@ -95,6 +99,7 @@ function cvmlist(){
      cvmactiondropdown();         
      $('#detailspanel').hide();
      $('#tablediv').show();
+     $('#statisticspanel').hide();
 }
 function cvmactiondropdown()
 {   
@@ -113,114 +118,405 @@ function cvmactiondropdown()
   }); 
  //location.reload();
 }
-
-
-function showgraph() {
+ function getcvmstats(){
+   var data = $('#cvm_radio:checked').val().split('_');
+   createGraphforcvm(data[0],1);
+   createGraphforcvm_mem(data[0]);
+  $('#statisticspanel').show();  
+  $('#tablediv').hide();
+  $('#detailspanel').hide();
+  $('#terminalpanel').hide();
   
- 
-  var influxdb = new InfluxDB({
-  "host" :"172.27.20.159",
-  "port" :"8086",
-  "username" :"ritika",
-  "password" :"ritika",
-  "database" :"stats"
-   });
-   
-  influxdb.query("select cpu_all from hostname4_cpu_172.27.20.163  ;", function(points) {
-     points = points[0].points
-     console.log(points);
-      var data = points.map(function(point) {
-      return { x: point.time/ 1000, y: point.cpu_all };
-    }).reverse();
-   
-    console.log(data);
-  
-  var graph = new Rickshaw.Graph({
-      element: document.querySelector("#chart"),
-      width: 640,
-      height: 180,
-      renderer: 'line',
-      series: [{ data: data, color: 'steelblue' }]
-    });
+ }
 
-    var xAxis = new Rickshaw.Graph.Axis.Time({ graph: graph });
-    var yAxis = new Rickshaw.Graph.Axis.Y({
-      graph: graph,
-      orientation: 'left',
-      element: document.getElementById('y_axis')
-    });
-
-    xAxis.render();
-    yAxis.render();
-    graph.render();
-   });
-}
-
-
-function createGraphforhost(id, type, numberofcores){
-var palette = new Rickshaw.Color.Palette();
-  var tv = 1000;
-  jsonarray = [];
-  for(var i=0;i<numberofcores;i++){
-    jsondata = {};
-    jsondata["name"]="core_"+i.toString();
-   // jsondata['color']= palette.color();
-    //jsonarray.push(jsondata);
-  }
-  jsondata = {};
-  jsondata["name"] = "cpu_all";
-  //jsondata['color']= palette.color();
-  jsonarray.push(jsondata);
-  //alert(JSON.stringify(jsonarray));
-  
-  var throughput = new Rickshaw.Graph({
-    element: document.querySelector("#throughput_chart"),
-    width: "600",
-    height: "380",
-    renderer: "line",
-    series: new Rickshaw.Series.FixedDuration(jsonarray, undefined, {
-        timeInterval: tv,
-        maxDataPoints: 200,
-        timeBase: new Date().getTime() / 1000
-    })
-   });
-  var xAxis = new Rickshaw.Graph.Axis.Time({ graph: throughput});
-    var yAxis = new Rickshaw.Graph.Axis.Y({
-      graph: throughput,
-      orientation: 'left',
-
-    });
-
-
-    xAxis.render();
-    yAxis.render();
-  setInterval(function () {
-    addRandomData(throughput,id, type,jsonarray);
-    throughput.render();
-  }, tv);
-}
-
-function addRandomData(chart, id , type, jsonarray) {
-  if(type == "host")
-  {
-    $.get("/dashboard/lastinfluxdata/"+id, function(rdata){
-       //console.log(JSON.stringify(rdata));
-       for(var i=0;i<jsonarray.length;i++){
-        data = {};
-        console.log(jsonarray[i].name + "  " + rdata[jsonarray[i].name])
-        data[jsonarray[i].name] = rdata[jsonarray[i].name];
-        chart.series.addData(data);
-       }
-    /*  var data = {
-        core_0: rdata.core_0
-    };
-    chart.series.addData(data);
-    var data = {
-        cpu_all: rdata.core_1
-    };
-    chart.series.addData(data);*/
-    });
-  }
-
+//id, type, numberofcores
+function createGraphforcvm(id ,cores){
     
-}
+    var dps = []; // dataPoints
+
+    var chart = new CanvasJS.Chart("chart_cpu",{
+      width: 420,
+      height: 320,
+      title :{
+        text: "CPU usage"
+      },
+      toolTip: {
+        shared: true
+        
+      },
+      legend: {
+        verticalAlign: "top",
+        horizontalAlign: "center",
+                                fontSize: 14,
+        fontWeight: "bold",
+        fontFamily: "calibri",
+        fontColor: "dimGrey"
+      }, 
+      axisY:{ 
+       title: "CPU in %",
+       suffix : " %",
+       maximum : 100,
+       minimum : 0
+       },     
+      data: [{
+        type: "line",
+        xValueType: "dateTime",
+        showInLegend: true,
+        dataPoints: dps 
+      }],
+       legend:{
+            cursor:"pointer",
+            itemclick : function(e) {
+              if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                e.dataSeries.visible = false;
+              }
+              else {
+                e.dataSeries.visible = true;
+              }
+              chart.render();
+            }
+          }
+    });
+    
+    var xVal = 0;
+    var yVal = 100; 
+    var updateInterval = 500;
+    var dataLength = 60; // number of dataPoints visible at any point
+    var time = new Date;
+    var updateChart = function (count) {
+      count = count || 1;
+      // count is number of times loop runs to generate random dataPoints.
+      
+      for (var j = 0; j < count; j++) { 
+        time.setTime(time.getTime()+ updateInterval);
+         $.get("/dashboard/lastinfluxcvmdata/"+id, function(rdata){
+          //console.log(rdata['time']);
+          if(timeXVal==-1){
+            timeXVal = parseInt(rdata['time']);
+          }
+          xVal = (parseInt(rdata['time']) - timeXVal)%60;
+          yVal =rdata['cpu'];
+            dps.push({
+            x: time.getTime()-1560000,
+            y: yVal
+             });
+            //console.log(rdata['memtotal_in_mb']);
+          
+          chart.options.data[0].legendText = " CPU Utilized is " + Math.floor(yVal) +"%";
+         });
+
+       
+      
+        
+      };
+      
+      if (dps.length > dataLength)
+      {
+        dps.shift();        
+      }
+      
+      chart.render();   
+
+    };
+
+    // generates first set of dataPoints
+    updateChart(dataLength); 
+    updateChart(3000);
+    // update chart after specified time. 
+    setInterval(function(){updateChart()}, updateInterval); 
+
+
+  }
+    
+    var timeXVal = -1;
+function createGraphforcvm_mem(id) {
+
+    var dps = []; // dataPoints
+
+    var chart = new CanvasJS.Chart("chart_mem",{
+      width: 420,
+      height: 320,
+      title :{
+        text: "Memory usage"
+      },
+      toolTip: {
+        shared: true
+        
+      },
+      legend: {
+        verticalAlign: "top",
+        horizontalAlign: "center",
+                                fontSize: 14,
+        fontWeight: "bold",
+        fontFamily: "calibri",
+        fontColor: "dimGrey"
+      }, 
+      axisY:{ 
+       title: "Memory in MB",
+       suffix : " MB",
+       maximum : 15720,
+       minimum : 0
+       },     
+      data: [{
+        type: "line",
+        xValueType: "dateTime",
+        showInLegend: true,
+        dataPoints: dps 
+      }],
+       legend:{
+            cursor:"pointer",
+            itemclick : function(e) {
+              if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                e.dataSeries.visible = false;
+              }
+              else {
+                e.dataSeries.visible = true;
+              }
+              chart.render();
+            }
+          }
+    });
+    
+    var xVal = 0;
+    var yVal = 100; 
+    var updateInterval = 400;
+    var dataLength = 60; // number of dataPoints visible at any point
+    var time = new Date;
+    var updateChart = function (count) {
+      count = count || 1;
+      // count is number of times loop runs to generate random dataPoints.
+      
+      for (var j = 0; j < count; j++) { 
+        time.setTime(time.getTime()+ updateInterval);
+         $.get("/dashboard/lastinfluxcvmdatamem/"+id, function(rdata){
+          //console.log(rdata['time']);
+          if(timeXVal==-1){
+            timeXVal = parseInt(rdata['time']);
+          }
+          xVal = (parseInt(rdata['time']) - timeXVal)%60;
+          yVal =rdata['memused_in_mb'];
+            dps.push({
+            x: time.getTime()-1560000,
+            y: yVal
+             });
+            //console.log(rdata['memtotal_in_mb']);
+          chart.options.axisY.maximum = rdata['memtotal_in_mb'];
+          chart.options.data[0].legendText = " Memory Utilized is " + parseInt(yVal) +" MB";
+         });
+
+       
+      
+        
+      };
+      
+      if (dps.length > dataLength)
+      {
+        dps.shift();        
+      }
+      
+      chart.render();   
+
+    };
+
+    // generates first set of dataPoints
+    updateChart(dataLength); 
+    updateChart(3000);
+    // update chart after specified time. 
+    setInterval(function(){updateChart()}, updateInterval); 
+
+  }
+
+
+function createGraphforcpuhost(id ,cores){
+    
+    var dps = [];
+    //var data = [];
+    for(var i=0;i<cores;i++){
+      hash = {};
+      hash["label"] = "Core"+i.toString();
+      hash["y"] = 0;
+      dps.push(hash);
+    }
+      hash = {};
+      hash["label"] = "all";
+      hash["y"] = 0;
+      dps.push(hash);
+      
+    var chart = new CanvasJS.Chart("chart_cpu",{
+      theme: "theme3",
+      width: 420,
+      height: 320,
+      title: {
+        text: "% CPU utilization"    
+      },
+      axisY: {        
+        suffix: " %",
+        maximum : 100,
+        minimum : 0
+      },    
+      legend :{
+        cursor: "pointer",
+        verticalAlign: 'center',
+        horizontalAlign: "left"
+      },
+      data: [
+      {
+        type: "column", 
+        bevelEnabled: true,       
+        indexLabel: "{y} %",
+        dataPoints: dps         
+      }
+      ],
+
+          
+    });
+
+    var updateInterval = 500;
+    // initial value
+    var yValue2 =0;
+      var yValue = [];
+    var updateChart = function (yValue,yValue2) {
+       yValue2 =0;
+       yValue = [];
+       $.get("/dashboard/lastinfluxdata/"+id, function(rdata){
+          
+          for(var i=0;i<cores;i++){
+            s = "core_"+i.toString();
+            //console.log(s);
+            yValue[i] = rdata[s];
+            //console.log("hi"+yValue[i]);
+          }
+          
+          yValue2 = rdata['cpu_all'];
+         
+          for (var i = 0; i < cores; i++) {
+
+          dps[i] = {label: "Core"+ i.toString(), y: yValue[i]};
+
+           };
+           dps[cores]={label: "all", y: Math.ceil(yValue2)};
+          
+        });
+       
+      
+
+      chart.render();
+    };
+    
+    updateChart();    
+
+    // update chart after specified interval 
+    setInterval(function(){updateChart(yValue,yValue2)}, updateInterval);
+
+
+  }
+    
+function createGraphformemhost(id) {
+      var dps = []; // dataPoints
+
+    var chart = new CanvasJS.Chart("chart_mem",{
+      width: 420,
+      height: 320,
+      title :{
+        text: "Memory usage"
+      },
+      toolTip: {
+        shared: true
+        
+      },
+      legend: {
+        verticalAlign: "top",
+        horizontalAlign: "center",
+                                fontSize: 14,
+        fontWeight: "bold",
+        fontFamily: "calibri",
+        fontColor: "dimGrey"
+      }, 
+      axisY:{ 
+       title: "Memory in MB",
+       suffix : " MB",
+       maximum : 15720,
+       minimum : 0
+       },     
+      data: [{
+        type: "line",
+        xValueType: "dateTime",
+        showInLegend: true,
+        dataPoints: dps 
+      }],
+       legend:{
+            cursor:"pointer",
+            itemclick : function(e) {
+              if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                e.dataSeries.visible = false;
+              }
+              else {
+                e.dataSeries.visible = true;
+              }
+              chart.render();
+            }
+          }
+    });
+    
+    var xVal = 0;
+    var yVal = 100; 
+    var updateInterval = 500;
+    var dataLength = 60; // number of dataPoints visible at any point
+    var time = new Date;
+    var updateChart = function (count) {
+      count = count || 1;
+      // count is number of times loop runs to generate random dataPoints.
+      
+      for (var j = 0; j < count; j++) { 
+        time.setTime(time.getTime()+ updateInterval);
+         $.get("/dashboard/lastinfluxdatamem/"+id, function(rdata){
+          //console.log(rdata['time']);
+          if(timeXVal==-1){
+            timeXVal = parseInt(rdata['time']);
+          }
+          xVal = (parseInt(rdata['time']) - timeXVal)%60;
+          yVal =rdata['memused'];
+            dps.push({
+            x: time.getTime() - 1560000,
+            y: yVal
+             });
+            //console.log(rdata['memtotal_in_mb']);
+          chart.options.axisY.maximum = rdata['memused'] + rdata['memfree'];
+          chart.options.data[0].legendText = " Memory Utilized is " + parseInt(yVal) +" MB";
+         });
+
+       
+      
+        
+      };
+      
+      if (dps.length > dataLength)
+      {
+        dps.shift();        
+      }
+      
+      chart.render();   
+
+    };
+
+    // generates first set of dataPoints
+    updateChart(dataLength); 
+    updateChart(3000);
+    // update chart after specified time. 
+    setInterval(function(){updateChart()}, updateInterval); 
+
+
+     }
+    
+
+
+  /*  nav_bar.haml to support select ur own host
+/.row
+                              /%label{:for => "specifiedhost"} Specified Host(optional)
+                              /%select#imagename.form-control{"data-original-title" => "", :name => "image", :title => ""}
+                                /%option{:value => "select"} --Select-- 
+                                /- hosts_active = get_active_hosts
+                                /- hosts_active.each do |host|
+                                  /%option{:value => host["id"]}= host["hostname"]
+                        
+  */

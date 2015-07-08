@@ -21,7 +21,8 @@
         
       %li
         %button.btn.btn-info{:href => "#detailspanel", :onclick => "getdetails();", :type => "button"} Details
-           
+      %li
+        %button.btn.btn-success{:href => "#statisticspanel", :onclick => "getcvmstats();", :type => "button"} Statistics     
             
     
     #detailspanel{:style => "display:none"} 
@@ -40,7 +41,11 @@
           %td SSH Port :
           %td
             %label#details_sshport 
-   
+  #statisticspanel{:style => "display:none"}
+    
+    #chart_cpu
+    #chart_mem
+        
   #tablediv
     %form#cvm_getid_form
       %table#cvmtable.table.table-bordered.table-hover

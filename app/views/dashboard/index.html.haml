@@ -7,9 +7,19 @@
   :javascript
     setTimeout("$('#alert').fadeOut('slow')", 5000)
 #wrapper
-  #chart_container
-  #y_axis
-  #x_axis
-  #chart
+  #navbarCollapse.collapse.navbar-collapse
+    %ul#mynavbar.nav.nav-tabs
+      %li
+        %button.btn.btn-warning{:href => "#chart_cpu", :id =>"openterminal" , :onclick =>  "getterminal();",   :type => "button"} CPU Bar graphs
+        
+      %li
+        %button.btn.btn-info{:href => "#char_cpu_graph", :onclick => "getdetails();", :type => "button"} CPU Stream graphs
+      %li
+        %button.btn.btn-success{:href => "#chart_mem", :onclick => "getcvmstats();", :type => "button"} Memory 
+  #chart_cpu
     :javascript
-      showgraph();
+      createGraphforcpuhost(6,8);
+  #chart_mem
+    :javascript
+      createGraphformemhost(6);
+

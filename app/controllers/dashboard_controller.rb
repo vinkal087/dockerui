@@ -52,7 +52,7 @@ authorize_resource :class => false, :only => [:users,:create_host]
   def create_cvm
     puts params
     userid = session[:user_id]
-    hostid = 1 
+    hostid = 6
     ispublic = params[:ispublic]
      HTTParty.post(APP_CONFIG['REST_API']['SERVER_NAME']+'/api/createcvm',
       :body =>{:userid => userid, :imageid =>params[:derivedimages], :cvmname => params[:cvmname],
@@ -97,6 +97,27 @@ authorize_resource :class => false, :only => [:users,:create_host]
 
 
   end
+  def get_latest_data_from_influx_mem
+    res = HTTParty.get(APP_CONFIG['REST_API']['SERVER_NAME']+"/api/lastinfluxdatamem/#{params[:id]}")
+    res = JSON.parse(res.body)
+    render json: res
+  end
+
+  def get_latest_cvm_data_from_influx
+    res = HTTParty.get(APP_CONFIG['REST_API']['SERVER_NAME']+"/api/lastinfluxcvmdata/#{params[:id]}")
+    res = JSON.parse(res.body)
+    render json: res
+
+
+  end
+  def get_latest_cvm_data_from_influx_mem
+    res = HTTParty.get(APP_CONFIG['REST_API']['SERVER_NAME']+"/api/lastinfluxcvmdatamem/#{params[:id]}")
+    res = JSON.parse(res.body)
+    render json: res
+
+
+  end
+  
 end
 
 
